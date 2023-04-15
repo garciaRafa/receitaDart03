@@ -7,17 +7,45 @@ void main() {
 
 class MyApp extends StatelessWidget {
 
-  @override
+   final List<Map<String, dynamic>> colorOptions = [
+    {'name': 'Roxo', 'color': Colors.deepPurple},
+    {'name': 'Verde', 'color': Colors.green},
+    {'name': 'Vermelho', 'color': Colors.red},
+  ];
 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      debugShowCheckedModeBanner:false,
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar( 
+        appBar: AppBar(
           title: const Text("Dicas"),
-          ),
-        body: DataBodyWidget(objects:[
+          actions: <Widget>[
+            PopupMenuButton<Color>(
+              icon: Icon(Icons.color_lens),
+              itemBuilder: (BuildContext context) {
+                return colorOptions.map((option) {
+                  return PopupMenuItem<Color>(
+                    value: option['color'],
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          color: option['color'],
+                        ),
+                        SizedBox(width: 8),
+                        Text(option['name']),
+                      ],
+                    ),
+                  );
+                }).toList();
+              },
+              )
+          ],
+        ),
+        body: DataBodyWidget(objects: [
           "La Fin Du Monde - Bock - 65 ibu",
           "Sapporo Premiume - Sour Ale - 54 ibu",
           "Duvel - Pilsner - 82 ibu"
@@ -28,17 +56,13 @@ class MyApp extends StatelessWidget {
             Icons.local_drink_outlined,
             Icons.flag_outlined,
           ],
-),
-      ));
+        ),
+      ),
+    );
   }
 }
 
-
-
-
-
 class NewNavBar extends StatelessWidget {
-
   final List<IconData> icons;
   NewNavBar({required this.icons});
 
@@ -60,26 +84,23 @@ class NewNavBar extends StatelessWidget {
   }
 }
 
-
-
 class DataBodyWidget extends StatelessWidget {
-
   List<String> objects;
 
-  DataBodyWidget( {this.objects = const [] });
-  Expanded processarUmElemento(String obj){
-    return Expanded(                
-          child: Center(child: Text(obj)),
-        );
+  DataBodyWidget({this.objects = const []});
+  Expanded processarUmElemento(String obj) {
+    return Expanded(
+      child: Center(child: Text(obj)),
+    );
   }
 
   @override
-
   Widget build(BuildContext context) {
-    return Column(children: objects.map( 
-      (obj) => Expanded(
-        child: Center(child: Text(obj)),
-        )
-      ).toList());
+    return Column(
+        children: objects
+            .map((obj) => Expanded(
+                  child: Center(child: Text(obj)),
+                ))
+            .toList());
   }
 }
