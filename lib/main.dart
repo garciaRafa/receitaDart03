@@ -5,13 +5,18 @@ void main() {
   runApp(app);
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  MyAppState createState() => MyAppState();
+}
 
-   final List<Map<String, dynamic>> colorOptions = [
-    {'name': 'Roxo', 'color': Colors.deepPurple},
-    {'name': 'Verde', 'color': Colors.green},
-    {'name': 'Vermelho', 'color': Colors.red},
+class MyAppState extends State<MyApp> {
+  final List<Map<String, dynamic>> colorOptions = [    
+    {'name': 'Roxo', 'color': Colors.deepPurple},    
+    {'name': 'Verde', 'color': Colors.green},    
+    {'name': 'Vermelho', 'color': Colors.red},  
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,32 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Dicas"),
-          actions: <Widget>[
-            PopupMenuButton<Color>(
-              icon: Icon(Icons.color_lens),
-              itemBuilder: (BuildContext context) {
-                return colorOptions.map((option) {
-                  return PopupMenuItem<Color>(
-                    value: option['color'],
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          color: option['color'],
-                        ),
-                        SizedBox(width: 8),
-                        Text(option['name']),
-                      ],
-                    ),
-                  );
-                }).toList();
-              },
-              )
-          ],
-        ),
+        appBar: MyAppBar(),
         body: DataBodyWidget(objects: [
           "La Fin Du Monde - Bock - 65 ibu",
           "Sapporo Premiume - Sour Ale - 54 ibu",
@@ -61,6 +41,39 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MyAppBar extends AppBar {
+
+  MyAppBar()
+      : super(
+          title: const Text("Dicas"),
+          actions: <Widget>[
+            PopupMenuButton<Color>(
+              icon: Icon(Icons.color_lens),
+              itemBuilder: (BuildContext context) {
+                final appState = context.findAncestorStateOfType<MyAppState>();
+                return appState!.colorOptions.map((option) {
+                  return PopupMenuItem<Color>(
+                    value: option['color'],
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          color: option['color'],
+                        ),
+                        SizedBox(width: 8),
+                        Text(option['name']),
+                      ],
+                    ),
+                  );
+                }).toList();
+              },
+            )
+          ],
+        );
+}
+
 
 class NewNavBar extends StatelessWidget {
   final List<IconData> icons;
