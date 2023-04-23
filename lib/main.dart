@@ -11,12 +11,11 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  final List<Map<String, dynamic>> colorOptions = [    
-    {'name': 'Roxo', 'color': Colors.deepPurple},    
-    {'name': 'Verde', 'color': Colors.green},    
-    {'name': 'Vermelho', 'color': Colors.red},  
+  final List<Map<String, dynamic>> colorOptions = [
+    {'name': 'Roxo', 'color': Colors.deepPurple},
+    {'name': 'Verde', 'color': Colors.green},
+    {'name': 'Vermelho', 'color': Colors.red},
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +24,9 @@ class MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: MyAppBar(),
-        body: DataBodyWidget(objects: [
-          "La Fin Du Monde - Bock - 65 ibu",
-          "Sapporo Premiume - Sour Ale - 54 ibu",
-          "Duvel - Pilsner - 82 ibu"
-        ]),
+        body: SingleChildScrollView(
+          child: DataBodyWidget(objects: dataObjects),
+        ),
         bottomNavigationBar: NewNavBar(
           icons: [
             Icons.coffee_outlined,
@@ -43,7 +40,6 @@ class MyAppState extends State<MyApp> {
 }
 
 class MyAppBar extends AppBar {
-
   MyAppBar()
       : super(
           title: const Text("Dicas"),
@@ -74,7 +70,6 @@ class MyAppBar extends AppBar {
         );
 }
 
-
 class NewNavBar extends StatelessWidget {
   final List<IconData> icons;
   NewNavBar({required this.icons});
@@ -97,23 +92,96 @@ class NewNavBar extends StatelessWidget {
   }
 }
 
-class DataBodyWidget extends StatelessWidget {
-  List<String> objects;
-
-  DataBodyWidget({this.objects = const []});
-  Expanded processarUmElemento(String obj) {
-    return Expanded(
-      child: Center(child: Text(obj)),
-    );
+var dataObjects = [
+  {
+    "name": "La Fin Du Monde",
+    "style": "Bock",
+    "ibu": "65"
+  },
+  {
+    "name": "Sapporo Premiume",
+    "style": "Sour Ale",
+    "ibu": "54"
+  },
+  {
+    "name": "Duvel", 
+    "style": "Pilsner", 
+    "ibu": "82"
+  },
+  {
+    "name": "La Fin Du Monde",
+    "style": "Bock",
+    "ibu": "65"
+  },
+  {
+    "name": "Sapporo Premiume",
+    "style": "Sour Ale",
+    "ibu": "54"
+  },
+  {
+    "name": "Duvel", 
+    "style": "Pilsner", 
+    "ibu": "82"
+  },
+  {
+    "name": "La Fin Du Monde",
+    "style": "Bock",
+    "ibu": "65"
+  },
+  {
+    "name": "Sapporo Premiume",
+    "style": "Sour Ale",
+    "ibu": "54"
+  },
+  {
+    "name": "Duvel", 
+    "style": "Pilsner", 
+    "ibu": "82"
+  },
+  {
+    "name": "La Fin Du Monde",
+    "style": "Bock",
+    "ibu": "65"
+  },
+  {
+    "name": "Sapporo Premiume",
+    "style": "Sour Ale",
+    "ibu": "54"
+  },
+  {
+    "name": "Duvel", 
+    "style": "Pilsner", 
+    "ibu": "82"
   }
+];
+
+class DataBodyWidget extends StatelessWidget {
+
+  List objects;
+  DataBodyWidget( {this.objects = const [] });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: objects
-            .map((obj) => Expanded(
-                  child: Center(child: Text(obj)),
-                ))
-            .toList());
+
+    var columnNames = ["Nome","Estilo","IBU"],
+      propertyNames = ["name", "style", "ibu"];
+    return Center(
+      child: DataTable(
+        columns: columnNames.map( 
+            (name) => DataColumn(
+              label: Expanded(
+                  child: Text(name, style: TextStyle(fontStyle: FontStyle.italic))
+              )
+            )
+        ).toList(),
+        rows: objects.map( 
+          (obj) => DataRow(
+              cells: propertyNames.map(
+                (propName) => DataCell(Text(obj[propName]))
+              ).toList()
+            )
+          ).toList()
+      ),
+    );
   }
 }
